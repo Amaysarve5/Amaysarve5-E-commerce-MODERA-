@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import './AddProduct.css';
 import upload_area from '../../assets/upload_area.svg';
 
+//  Define API_URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL;
+
+
 const AddProduct = () => {
   const [image, setImage] = useState(null);
   const [productDetails, setProductDetails] = useState({
@@ -28,32 +32,32 @@ const AddProduct = () => {
     let product = productDetails;
 
     let formData = new FormData();
-    formData.append('product',image);
+    formData.append('product', image);
 
-    await fetch('http://localhost:4000/upload', {
+    await fetch(`${API_URL}/upload`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json'
       },
       body: formData,
-    }).then((resp) => resp.json()).then((data)=>{responseData = data})
+    }).then((resp) => resp.json()).then((data) => {
+      responseData = data;
+    });
 
-    if(responseData.success){
+    if (responseData.success) {
       product.image = responseData.image_url;
       console.log(product);
-      await fetch('http://localhost:4000/addproduct', {
+      await fetch(`${API_URL}/addproduct`, {
         method: 'POST',
-        headers:{
-          Accept:'application/json',
+        headers: {
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(product),
-      }).then((resp)=>resp.json()).then((data)=>{
-        data.success?alert("Product Added"):alert("Failed")
-      })
+      }).then((resp) => resp.json()).then((data) => {
+        data.success ? alert("Product Added") : alert("Failed");
+      });
     }
-
-    
   };
 
   return (

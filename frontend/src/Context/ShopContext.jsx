@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
 
-const API_BASE = process.env.REACT_APP_API_URL; // ✅ .env variable
+const API_BASE = process.env.REACT_APP_API_URL; // .env variable
 
 const getDefaultCart = () => {
   let cart = {};
@@ -16,14 +16,14 @@ const ShopContextProvider = (props) => {
   const [all_product, setAll_Product] = useState([]);
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
-  // ✅ Fetch all products
+  //  Fetch all products
   useEffect(() => {
     fetch(`${API_BASE}/allproducts`)
       .then((response) => response.json())
       .then((data) => setAll_Product(data));
   }, []);
 
-  // ✅ Load cart from backend
+  //  Load cart from backend
   useEffect(() => {
     if (localStorage.getItem("auth-token")) {
       fetch(`${API_BASE}/getcart`, {
@@ -53,7 +53,7 @@ const ShopContextProvider = (props) => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
-  // ✅ Add to cart
+  //  Add to cart
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
 
@@ -65,14 +65,14 @@ const ShopContextProvider = (props) => {
           "auth-token": localStorage.getItem("auth-token"),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ itemId }), // ✅ Correct body
+        body: JSON.stringify({ itemId }), // Correct body
       })
         .then((response) => response.json())
         .then((data) => setCartItems(data));
     }
   };
 
-  // ✅ Remove from cart
+  // Remove from cart
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({
       ...prev,
